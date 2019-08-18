@@ -11,3 +11,18 @@
   padding: 20px 30px;
   text-align: left;
 }
+
+.page-heading{
+  padding: 10px 10px 0 10px;
+  text-align: left;
+  padding-left: 50px;
+}
+.search-wrapper{
+  width: 50%;
+  margin-bottom: 20px;
+  .search-input{
+    float: left;
+    width: 70%;
+    margin-right: 10px;
+  }
+}

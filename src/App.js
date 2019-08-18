@@ -1,13 +1,13 @@
 import React from 'react';
 import './App.css';
 import 'antd/dist/antd.css';
-import Employees from './components/employees/employees';
+import EmployeesContainer from './components/employees/container/employeeContainer';
 
 
 function App() {
   return (
     <div className="App">
-      <Employees />
+      <EmployeesContainer />
     </div>
   );
 }
