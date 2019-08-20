@@ -13,24 +13,22 @@ class Employees extends Component {
     this.state = {
       visible: false,
       isEdit: false,
-      fields: {}
+      fields: {},
+      pagination: {}
     };
   };
 
   componentWillMount() {
-    this.props.getEmployees();
+    const params = {
+      "page": 1,
+      "results": 10,
+      "sortField": "id",
+      "sortOrder": "ascending"
+    };
+    this.props.getEmployees(params);
   };
 
-  showModal = (data) => {
-    if (data) {
-      this.setState({
-        isEdit: true
-      });
-    } else {
-      this.setState({
-        isEdit: false
-      });
-    }
+  showModal = () => {
     this.setState({
       visible: true
     });
@@ -42,24 +40,45 @@ class Employees extends Component {
       form.resetFields();
   };
 
+  formatDate = (date) => {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [year, month, day].join('-');
+  };
   handleOk = () => {
     const { form } = this.formRef.props;
     form.validateFields((err, values) => {
       if (err) {
         return;
       }
-      console.log('Received values of form: ', values);
-      this.props.addEmployee(values);
+
+      values.dob = this.formatDate(values.dob._d);
+      if (this.state.isEdit) {
+        this.props.updateEmployee(values);
+      } else {
+        this.props.addEmployee(values);
+        
+      }
+
       this.resetForm();
-      this.setState({ visible: false });
+      this.setState({
+        visible: false,
+        isEdit: this.isEdit ? false : this.isEdit
+      });
     });
   };
 
   handleCancel = e => {
-    console.log(e);
     this.resetForm();
     this.setState({
-      visible: false
+      visible: false,
+      isEdit: this.isEdit ? false : this.isEdit
     });
   };
 
@@ -100,17 +119,23 @@ class Employees extends Component {
     this.setState(({ fields }) => ({
       fields: { ...fields, ...changedFields },
     }));
-    console.log(changedFields);
   };
+
 
   gridData = () => {
     if (this.props.data.employeeReducer)
-      return utils.convertObjToArray(this.props.data.employeeReducer);
+    {
+      if(this.props.data.employeeReducer.result)
+      {
+        return utils.convertObjToArray(this.props.data.employeeReducer.result.employeeList);
+      }
+    }
   };
 
   render() {
     const { isEdit } = this.state;
     const data = this.gridData();
+    const total = this.props.data.employeeReducer.total;
     return (
       <Layout className="layout" >
         <Header>
@@ -122,7 +147,7 @@ class Employees extends Component {
           <h3 className="page-heading">Employees</h3>
           <div className="content-wrapper">
             <div>
-              <Grid data={data} handleOnClick={this.handleOnClick} />
+              <Grid onSearch={this.props.searchEmployee} total={total} onDelete={this.props.deleteEmployee} onFilter={this.props.getEmployees} data={data} handleOnClick={this.handleOnClick} />
               <Button className="add-employee-btn" onClick={this.showModal} type="primary">
                 New Employee
             </Button>

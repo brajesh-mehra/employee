@@ -17,8 +17,3 @@ export const addValueInArray = (arr, value) => {
   }
   return arr;
 }
-
-// const addValueInArray(arr, value) {
-//   const sheet = lodash.find(aeDiscoverDocData.data.sheets, { id: mvsId });
-//   sheet.isEditableCanvas = isEditableCanvas;
-// }

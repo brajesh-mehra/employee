@@ -5,9 +5,18 @@ import './grid.scss'
 
 class Grid extends Component {
 
+  componentWillMount() {
+    this.setState({
+      pagination: {
+        total: this.props.total ? this.props.total : 30
+      }
+    })
+  };
+
   state = {
     data: [],
-    pagination: {},
+    pagination: {
+    },
     loading: false,
     columns: [
       {
@@ -51,10 +60,10 @@ class Grid extends Component {
         title: '',
         dataIndex: '',
         key: 'x',
-        render: (text, record) => (
+        render: (record) => (
           <span
             className='delete-row'
-            onClick={(e) => { this.onDelete(record.key, e); }}
+            onClick={(e) => { this.onDelete(record); }}
           >
             <Icon type="delete" />
           </span>
@@ -69,28 +78,27 @@ class Grid extends Component {
     this.setState({
       pagination: pager,
     });
-    this.fetch({
+
+    this.props.onFilter({
       results: pagination.pageSize,
       page: pagination.current,
       sortField: sorter.field,
       sortOrder: sorter.order,
       ...filters,
     });
+
   };
 
   handleOnClick = (e) => {
     this.props.handleOnClick(e);
   };
 
-  onDelete = (key, e) => {
-    e.preventDefault();
-    const data = this.state.data.filter(item => item.key !== key);
-    this.setState({ data, isPageTween: false });
+  onDelete = (record) => {
+    this.props.onDelete(record.id);
   };
- 
+
 
   fetch = (params = {}) => {
-    console.log('params:', params);
     this.setState({ loading: true });
     const pagination = { ...this.state.pagination };
     // Read total count from server
@@ -102,18 +110,33 @@ class Grid extends Component {
       pagination,
     });
   };
+  setTotal = () => {
+    this.setState({
+      pagination: { total: this.props.total }
+    });
+  };
+
+  updateInputValue = (e) => { 
+    this.setState({
+      query:e.target.value
+    });
+  };
+  onSearch = () => {
+    this.props.onSearch(this.state.query);
+  };
 
   render() {
     return (
       <div>
         <div className="search-wrapper">
-          <Input className="search-input" placeholder="Type the name or last name of the employee" />
-          <Button className="search-button" type="primary" icon="search">
+          <Input className="search-input" onChange={this.updateInputValue} value={this.state.query} placeholder="Type the name or last name of the employee" />
+          <Button className="search-button" onClick={this.onSearch} type="primary" icon="search">
             Search
           </Button>
         </div>
 
         <Table
+          total={this.setTotal}
           columns={this.state.columns}
           rowKey={uuid}
           dataSource={this.props.data}

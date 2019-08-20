@@ -14,9 +14,18 @@ const mapDispatchToProps = dispatch => {
     addEmployee: (data) => {
       dispatch(actions.addEmployee(data));
     },
-    getEmployees: () => {
-      dispatch(actions.getEmployees());
+    getEmployees: (params, query) => {
+      dispatch(actions.getEmployees(params, query));
     },
+    updateEmployee:(params) =>{
+      dispatch(actions.updateEmployee(params));
+    },
+    deleteEmployee:(id)=>{
+      dispatch(actions.deleteEmployee(id));
+    },
+    searchEmployee:(query)=>{
+      dispatch(actions.searchEmployee(query));
+    }
   }
 };
 
