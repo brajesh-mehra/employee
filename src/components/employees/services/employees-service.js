@@ -22,6 +22,7 @@ const API = {
     })
   },
   updateEmployee: (data) => {
+    debugger;
     return axios.put(`${SERVER_URL}/employees/update/${data.id}`, JSON.stringify(data), {
       headers: {
         'content-type': 'application/json'

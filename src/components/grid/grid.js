@@ -1,22 +1,13 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Table, Input, Button, Icon } from 'antd';
 import uuid from 'uuid';
 import './grid.scss'
 
 class Grid extends Component {
 
-  componentWillMount() {
-    this.setState({
-      pagination: {
-        total: this.props.total ? this.props.total : 30
-      }
-    })
-  };
-
   state = {
     data: [],
-    pagination: {
-    },
     loading: false,
     columns: [
       {
@@ -38,19 +29,23 @@ class Grid extends Component {
       {
         title: 'Last Name',
         dataIndex: 'lastName',
+        sorter: true,
         filters: [{ text: 'Name', value: 'name' }, { text: 'Last Name', value: 'lastName' }]
       },
       {
         title: 'Birth Date',
-        dataIndex: 'dob'
+        dataIndex: 'dob',
+        sorter: true
       },
       {
         title: 'Role',
-        dataIndex: 'role'
+        dataIndex: 'role',
+        sorter: true
       },
       {
         title: 'Department',
-        dataIndex: 'department'
+        dataIndex: 'department',
+        sorter: true
       },
       {
         title: 'Email',
@@ -98,14 +93,10 @@ class Grid extends Component {
   };
 
 
-  fetch = (params = {}) => {
-    this.setState({ loading: true });
+  fetchRecord = () => {
     const pagination = { ...this.state.pagination };
-    // Read total count from server
-    // pagination.total = data.totalCount;
-    pagination.total = 50;
+    pagination.total = this.props.total;
     this.setState({
-      loading: false,
       data: this.props.data,
       pagination,
     });
@@ -116,9 +107,9 @@ class Grid extends Component {
     });
   };
 
-  updateInputValue = (e) => { 
+  updateInputValue = (e) => {
     this.setState({
-      query:e.target.value
+      query: e.target.value
     });
   };
   onSearch = () => {
@@ -134,20 +125,26 @@ class Grid extends Component {
             Search
           </Button>
         </div>
-
         <Table
           total={this.setTotal}
           columns={this.state.columns}
           rowKey={uuid}
           dataSource={this.props.data}
-          pagination={this.state.pagination}
+          pagination={this.props.pagination}
           loading={this.state.loading}
           onChange={this.handleTableChange}
         />
       </div>
     );
   }
-
 }
 
 export default Grid;
+
+Grid.propTypes = {
+  onSearch: PropTypes.func,
+  total: PropTypes.number,
+  onDelete: PropTypes.func,
+  onFilter: PropTypes.func,
+  handleOnClick: PropTypes.func
+};

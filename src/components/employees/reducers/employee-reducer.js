@@ -1,5 +1,4 @@
 import * as actionTypes from "../action-type/actionTypes";
-import { addValueInArray } from "../../../utils/Utils";
 
 const employeeReducer = (state = [], action) => {
   switch (action.type) {

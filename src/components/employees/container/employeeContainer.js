@@ -14,16 +14,19 @@ const mapDispatchToProps = dispatch => {
     addEmployee: (data) => {
       dispatch(actions.addEmployee(data));
     },
-    getEmployees: (params, query) => {
-      dispatch(actions.getEmployees(params, query));
+    getEmployees: (params, onGetEmployee) => {
+      dispatch(actions.getEmployees(params))
+        .then((data) => {
+          onGetEmployee(data);
+        });
     },
-    updateEmployee:(params) =>{
+    updateEmployee: (params) => {
       dispatch(actions.updateEmployee(params));
     },
-    deleteEmployee:(id)=>{
+    deleteEmployee: (id) => {
       dispatch(actions.deleteEmployee(id));
     },
-    searchEmployee:(query)=>{
+    searchEmployee: (query) => {
       dispatch(actions.searchEmployee(query));
     }
   }

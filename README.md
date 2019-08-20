@@ -1,4 +1,20 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project has been developed based on below technolgies:
+1. UI layer: 
+   - React
+   - Redux
+   - Ant Design
+2. Backend Layer:
+   - Java 8
+
+Setup:
+ - First - start the backend server, which should open on port 8080. 
+ - Location of the jar is: employee -> backend -> target -> employees-0.0.1-SNAPSHOT.jar
+ command to start the server 
+ ## `java -jar employees-0.0.1-SNAPSHOT.jar`
+- Then start UI server
+## `npm start`
+
+Please email me in case have any doubts at brajesh.mehra14@gmail.com
 
 ## Available Scripts
 
